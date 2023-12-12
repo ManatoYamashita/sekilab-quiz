@@ -10,7 +10,7 @@ const app = Vue.createApp({
         {
           question:
             "q1",
-          img: "./img/1.jpg",
+          img: "./1.jpg",
           answers: { a: "a", b: "b", c: "c", d: "d" },
           correctAnswer: "a",
         },
