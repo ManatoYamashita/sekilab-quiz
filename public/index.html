@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- ogpの設定 -->
+    <meta property="og:title" content="SEKI-LAB Quiz App" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://sekilab-quiz.vercel.app/" />
+    <meta property="og:image" content="./logo.png" />
+    <meta property="og:site_name" content="SEKI-LAB Quiz App" />
+    <meta property="og:description" content="SEKI-LABの情報セキュリティクイズです。" />
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
+      integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+        footer {
+            margin: 0 0 2rem;
+        }
+        i.fab:hover {
+            opacity: 0.9;
+        }
+    </style>
+    <title>SEKI-LAB Quiz App</title>
+  </head>
+
+  <body class="antialiased text-gray-700 bg-gray-100">
+    <div id="app" class="flex w-full h-screen justify-center items-center">
+      <div class="w-full max-w-xl p-3 text-center" id="content">
+        <a href="https://sekilab.vercel.app" target="_blank" rel="noopener"><img src="./logo.png" alt="logo" id="logo" /></a>
+
+        <h1 class="font-bold text-center text-seki" id="title">
+          情報セキュリティクイズ
+        </h1>
+        <div class="bg-white p-12 rounded-lg shadow-lg w-full mt-4" id="container">
+          <div v-if="idx < count">
+            <p class="text-2xl font-bold"><span>{{idx+1}}/{{count}}: </span>{{questions[idx]['question']}}</p>
+            <img id="image" alt="image" v-if="questions[idx]['img']" :src="questions[idx]['img']" class="w-1/2 mx-auto" />
+            <label
+              v-for="(answer, index) in questions[idx].answers"
+              :key="index"
+              :for="index"
+              class="block mt-4 border border-gray-300 rounded-lg py-2 px-6 text-lg"
+              :class="{'hover:bg-gray-100 cursor-pointer' : selectedAnswer == ''}, {'bg-green-200' : index == questions[idx].correctAnswer && selectedAnswer != ''}, {'bg-red-200' : selectedAnswer == index}"
+            >
+              <input
+                :id="index"
+                type="radio"
+                class="hidden"
+                :value="index"
+                @change="answered($event)"
+                :disabled="selectedAnswer != ''"
+              />
+              {{answer}}
+            </label>
+            <div class="mt-6 flow-root">
+              <button
+                @click="nextQuestion"
+                v-show="selectedAnswer != '' && idx < count - 1"
+                class="float-right bg-seki text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"
+              >
+                Next &gt;
+              </button>
+              <button
+                @click="showResults"
+                v-show="selectedAnswer != '' && idx == count - 1"
+                class="float-right bg-seki text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"
+              >
+                Finish
+              </button>
+            </div>
+          </div>
+          <div v-else>
+            <h2 class="text-bold text-3xl">Results</h2>
+            <div class="flex justify-start space-x-4 mt-6">
+              <p id="result">
+                得点:
+                <span class="text-5xl text-green-700 font-bold"
+                  >{{correctAnswers}}</span
+                >
+              </p>
+              <!-- <p>
+                Wrong Answers:
+                <span class="text-2xl text-red-700 font-bold"
+                  >{{wrongAnswers}}</span
+                >
+              </p> -->
+            </div>
+            <div class="mt-6 flow-root">
+              <button
+                @click="resetQuiz"
+                class="float-right bg-seki text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"
+              >
+                Play again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="text-center">
+      <!-- <a
+        href="https://github.com/ManatoYamashita"
+        target="_blank"
+        title="Viewing existing code on GitHub. Simple Quiz App using Vue 3 and Tailwind CSS"
+        ><i class="fab fa-github fa-2x"></i></a
+      ><br /> -->
+      <p>For That's Seminar 2023</p>
+      <small>©️<span id="year"></span>東京都市大学 関研究室 | <a href="http://manapuraza.com" target="_blank" rel="noopener noreferrer">Manato Yamashita</a></small>
+    </footer>
+    <script src="https://unpkg.com/vue@next"></script>
+    <script src="./main.js"></script>
+    <script>
+      const year = new Date().getFullYear();
+      document.querySelector("#year").textContent = year;
+    </script>
+
+    <style>
+      #content {
+        animation: fadeIn 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+      }
+      #logo {
+        width: 8rem;
+        margin: 1rem;
+      }
+      #title {
+        font-family: monospace;
+        font-weight: 700;
+        font-size: 2rem;
+      }
+      #image {
+        display: inline;
+        width: 20rem;
+        height: 10rem;
+        object-fit: cover;
+        border-radius: 0.8rem;
+        margin: 1rem 0;
+      }
+      #result {
+        font-family: monospace;
+        font-weight: 700;
+        font-size: 2rem;
+      }
+      #container, label, p, button {
+        animation: fadeIn 0.5s ease-in-out;
+        transition: all 0.5s ease-in-out;
+      }
+      footer {
+        margin-top: 2rem;
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </body>
+</html>
