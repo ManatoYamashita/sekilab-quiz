@@ -6,12 +6,13 @@ const app = Vue.createApp({
       correctAnswers: 0,
       wrongAnswers: 0,
       count: 3,
+
       questions: [
         {
           question:
-            "q1",
+            "スマホやパソコンの画面を後ろから覗き見て情報を盗む攻撃を何という？",
           img: "./ogp.jpg",
-          answers: { a: "a", b: "b", c: "c", d: "d" },
+          answers: { a: "ショルダーハック", b: "SQLインジェクション", c: "背後脆弱", d: "這いよれニャル子さん" },
           correctAnswer: "a",
         },
         {
