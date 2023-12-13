@@ -5,7 +5,7 @@ const app = Vue.createApp({
       selectedAnswer: "",
       correctAnswers: 0,
       wrongAnswers: 0,
-      count: 3,
+      count: 10,
       
       questions: [
         {
