@@ -34,7 +34,13 @@
   <body class="antialiased text-gray-700 bg-gray-100">
     <div id="app" class="flex w-full h-screen justify-center items-center">
       <div class="w-full max-w-xl p-3 text-center" id="content">
-        <a href="https://sekilab.vercel.app" target="_blank" rel="noopener"><img src="./img/logo.png" alt="logo" id="logo" /></a>
+        <a href="https://sekilab.vercel.app" target="_blank" rel="noopener">
+          <!-- #logo is rendered at 8rem (128px) wide, so serve 1x/2x/3x WebP and keep a 2x PNG as fallback -->
+          <picture>
+            <source type="image/webp" srcset="./img/logo-1x.webp 1x, ./img/logo-2x.webp 2x, ./img/logo-3x.webp 3x" />
+            <img src="./img/logo.png" alt="logo" id="logo" />
+          </picture>
+        </a>
         
         <h1 class="font-bold text-center text-seki" id="title">
           情報セキュリティクイズ
